@@ -46,6 +46,7 @@ See also [`isisometry`](@ref) and [`is_right_isometry`](@ref).
 """ is_left_isometry
 
 function is_left_isometry(A::AbstractMatrix; atol::Real = 0, rtol::Real = defaulttol(A), norm = LinearAlgebra.norm)
+    iszero(size(A, 2)) && return true
     P = A' * A
     nP = norm(P) # isapprox would use `rtol * max(norm(P), norm(I))`
     diagview(P) .-= 1
@@ -62,6 +63,7 @@ See also [`isisometry`](@ref) and [`is_left_isometry`](@ref).
 """ is_right_isometry
 
 function is_right_isometry(A::AbstractMatrix; atol::Real = 0, rtol::Real = defaulttol(A), norm = LinearAlgebra.norm)
+    iszero(size(A, 1)) && return true
     P = A * A'
     nP = norm(P) # isapprox would use `rtol * max(norm(P), norm(I))`
     diagview(P) .-= 1
