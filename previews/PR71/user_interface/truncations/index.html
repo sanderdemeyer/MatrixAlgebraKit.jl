@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Truncations · MatrixAlgebraKit.jl</title><meta name="title" content="Truncations · MatrixAlgebraKit.jl"/><meta property="og:title" content="Truncations · MatrixAlgebraKit.jl"/><meta property="twitter:title" content="Truncations · MatrixAlgebraKit.jl"/><meta name="description" content="Documentation for MatrixAlgebraKit.jl."/><meta property="og:description" content="Documentation for MatrixAlgebraKit.jl."/><meta property="twitter:description" content="Documentation for MatrixAlgebraKit.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">MatrixAlgebraKit.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">User Interface</span><ul><li><a class="tocitem" href="../compositions/">Compositions</a></li><li><a class="tocitem" href="../decompositions/">Decompositions</a></li><li class="is-active"><a class="tocitem" href>Truncations</a><ul class="internal"><li><a class="tocitem" href="#Truncation-Strategies"><span>Truncation Strategies</span></a></li><li><a class="tocitem" href="#Using-Truncations-in-Decompositions"><span>Using Truncations in Decompositions</span></a></li><li><a class="tocitem" href="#Complete-Example"><span>Complete Example</span></a></li><li><a class="tocitem" href="#Truncation-with-SVD-vs-Eigenvalue-Decompositions"><span>Truncation with SVD vs Eigenvalue Decompositions</span></a></li><li><a class="tocitem" href="#Advanced:-Custom-Truncation-Filters"><span>Advanced: Custom Truncation Filters</span></a></li></ul></li><li><a class="tocitem" href="../matrix_functions/">Matrix functions</a></li></ul></li><li><a class="tocitem" href="../../dev_interface/">Developer Interface</a></li><li><a class="tocitem" href="../../library/">Library</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">User Interface</a></li><li class="is-active"><a href>Truncations</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Truncations</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/main/docs/src/user_interface/truncations.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Truncations"><a class="docs-heading-anchor" href="#Truncations">Truncations</a><a id="Truncations-1"></a><a class="docs-heading-anchor-permalink" href="#Truncations" title="Permalink"></a></h1><p>Truncation strategies allow you to control which eigenvalues or singular values to keep when computing partial or truncated decompositions. These strategies are used in functions like <a href="../../library/#MatrixAlgebraKit.eigh_trunc"><code>eigh_trunc</code></a>, <a href="../../library/#MatrixAlgebraKit.eig_trunc"><code>eig_trunc</code></a>, and <a href="../../library/#MatrixAlgebraKit.svd_trunc"><code>svd_trunc</code></a> to reduce the size of the decomposition while retaining the most important information.</p><h2 id="Truncation-Strategies"><a class="docs-heading-anchor" href="#Truncation-Strategies">Truncation Strategies</a><a id="Truncation-Strategies-1"></a><a class="docs-heading-anchor-permalink" href="#Truncation-Strategies" title="Permalink"></a></h2><p>MatrixAlgebraKit provides several built-in truncation strategies:</p><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="MatrixAlgebraKit.notrunc-user_interface-truncations" href="#MatrixAlgebraKit.notrunc-user_interface-truncations"><code>MatrixAlgebraKit.notrunc</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">notrunc()</code></pre><p>Truncation strategy that does nothing, and keeps all the values.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/d02cd8348c4167b61c3fc1d0805113ecbe0bd4a6/src/interface/truncation.jl#L37-L41">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="MatrixAlgebraKit.truncrank-user_interface-truncations" href="#MatrixAlgebraKit.truncrank-user_interface-truncations"><code>MatrixAlgebraKit.truncrank</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">truncrank(howmany::Integer; by=abs, rev::Bool=true)</code></pre><p>Truncation strategy to keep the first <code>howmany</code> values when sorted according to <code>by</code> or the last <code>howmany</code> if <code>rev</code> is true.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/d02cd8348c4167b61c3fc1d0805113ecbe0bd4a6/src/interface/truncation.jl#L58-L62">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="MatrixAlgebraKit.trunctol-user_interface-truncations" href="#MatrixAlgebraKit.trunctol-user_interface-truncations"><code>MatrixAlgebraKit.trunctol</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">trunctol(; atol::Real=0, rtol::Real=0, p::Real=2, by=abs, keep_below::Bool=false)</code></pre><p>Truncation strategy to keep the values that satisfy <code>by(val) &gt; max(atol, rtol * norm(values, p)</code>. If <code>keep_below = true</code>, discard these values instead.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/d02cd8348c4167b61c3fc1d0805113ecbe0bd4a6/src/interface/truncation.jl#L103-L108">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="MatrixAlgebraKit.truncfilter-user_interface-truncations" href="#MatrixAlgebraKit.truncfilter-user_interface-truncations"><code>MatrixAlgebraKit.truncfilter</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">truncfilter(filter)</code></pre><p>Truncation strategy to keep the values for which <code>filter</code> returns true.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/d02cd8348c4167b61c3fc1d0805113ecbe0bd4a6/src/interface/truncation.jl#L78-L82">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="MatrixAlgebraKit.truncerror-user_interface-truncations" href="#MatrixAlgebraKit.truncerror-user_interface-truncations"><code>MatrixAlgebraKit.truncerror</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">truncerror(; atol::Real=0, rtol::Real=0, p::Real=2)</code></pre><p>Truncation strategy for truncating values such that the error in the factorization is smaller than <code>max(atol, rtol * norm)</code>, where the error is determined using the <code>p</code>-norm.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/QuantumKitHub/MatrixAlgebraKit.jl/blob/d02cd8348c4167b61c3fc1d0805113ecbe0bd4a6/src/interface/truncation.jl#L128-L133">source</a></section></article><p>Truncation strategies can be combined using the <code>&amp;</code> operator to create intersection-based truncation. When strategies are combined, only the values that satisfy all conditions are kept.</p><pre><code class="language-julia-repl hljs">julia&gt; using MatrixAlgebraKit
+
+julia&gt; combined_trunc = truncrank(10) &amp; trunctol(; atol = 1e-6);
+
+julia&gt; typeof(combined_trunc)
+MatrixAlgebraKit.TruncationIntersection{Tuple{MatrixAlgebraKit.TruncationByOrder{typeof(abs)}, MatrixAlgebraKit.TruncationByValue{Float64, Int64, typeof(abs)}}}</code></pre><h2 id="Using-Truncations-in-Decompositions"><a class="docs-heading-anchor" href="#Using-Truncations-in-Decompositions">Using Truncations in Decompositions</a><a id="Using-Truncations-in-Decompositions-1"></a><a class="docs-heading-anchor-permalink" href="#Using-Truncations-in-Decompositions" title="Permalink"></a></h2><p>Truncation strategies can be used with truncated decomposition functions in two ways:</p><h3 id="1.-Using-the-trunc-keyword-with-a-NamedTuple"><a class="docs-heading-anchor" href="#1.-Using-the-trunc-keyword-with-a-NamedTuple">1. Using the <code>trunc</code> keyword with a <code>NamedTuple</code></a><a id="1.-Using-the-trunc-keyword-with-a-NamedTuple-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Using-the-trunc-keyword-with-a-NamedTuple" title="Permalink"></a></h3><p>The simplest approach is to pass a <code>NamedTuple</code> with the truncation parameters:</p><pre><code class="language-julia-repl hljs">julia&gt; using MatrixAlgebraKit
+
+julia&gt; # Create a symmetric matrix with known values
+       A = [4.0 2.0 1.0; 2.0 5.0 3.0; 1.0 3.0 6.0];
+
+julia&gt; # Keep only the 2 largest eigenvalues
+       D, V = eigh_trunc(A; trunc = (maxrank = 2,));
+
+julia&gt; size(D)
+(2, 2)
+
+julia&gt; size(V)
+(3, 2)</code></pre><p>You can also use tolerance-based truncation or combine multiple criteria:</p><pre><code class="language-julia-repl hljs">julia&gt; # Keep eigenvalues with absolute value above tolerance
+       D, V = eigh_trunc(A; trunc = (atol = 1e-6,));
+
+julia&gt; size(D, 1)  # All eigenvalues are above 1e-6
+3
+
+julia&gt; # Combine multiple criteria
+       D, V = eigh_trunc(A; trunc = (maxrank = 2, atol = 1e-10));
+
+julia&gt; size(D)
+(2, 2)</code></pre><h3 id="2.-Using-explicit-TruncationStrategy-objects"><a class="docs-heading-anchor" href="#2.-Using-explicit-TruncationStrategy-objects">2. Using explicit <code>TruncationStrategy</code> objects</a><a id="2.-Using-explicit-TruncationStrategy-objects-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Using-explicit-TruncationStrategy-objects" title="Permalink"></a></h3><p>For more control, you can construct <code>TruncationStrategy</code> objects directly:</p><pre><code class="language-julia-repl hljs">julia&gt; # Keep the 2 largest eigenvalues
+       strategy = truncrank(2);
+
+julia&gt; D, V = eigh_trunc(A; trunc = strategy);
+
+julia&gt; size(D)
+(2, 2)
+
+julia&gt; # Combine strategies: keep at most 2 eigenvalues, all above 1e-8
+       strategy = truncrank(2) &amp; trunctol(; atol = 1e-8);
+
+julia&gt; D, V = eigh_trunc(A; trunc = strategy);
+
+julia&gt; size(D)
+(2, 2)</code></pre><h2 id="Complete-Example"><a class="docs-heading-anchor" href="#Complete-Example">Complete Example</a><a id="Complete-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Complete-Example" title="Permalink"></a></h2><p>Here&#39;s a complete example demonstrating different truncation approaches:</p><pre><code class="language-julia-repl hljs">julia&gt; using MatrixAlgebraKit, LinearAlgebra
+
+julia&gt; # Create a symmetric test matrix with known spectrum
+       A = [10.0  2.0  1.0  0.5;
+             2.0  8.0  1.5  0.3;
+             1.0  1.5  6.0  0.2;
+             0.5  0.3  0.2  4.0];
+
+julia&gt; # 1. No truncation - keep all eigenvalues
+       D_full, V_full = eigh_trunc(A; trunc = nothing);
+
+julia&gt; size(D_full)
+(4, 4)
+
+julia&gt; # 2. Keep only the 2 largest eigenvalues
+       D_rank, V_rank = eigh_trunc(A; trunc = (maxrank = 2,));
+
+julia&gt; size(D_rank)
+(2, 2)
+
+julia&gt; size(V_rank)
+(4, 2)
+
+julia&gt; # 3. Keep eigenvalues with absolute value above a threshold
+       D_tol, V_tol = eigh_trunc(A; trunc = (atol = 5.0,));
+
+julia&gt; size(D_tol, 1) &gt;= 2  # At least 2 eigenvalues are above 5.0
+true
+
+julia&gt; # 4. Combine rank and tolerance truncation
+       strategy = truncrank(3) &amp; trunctol(; atol = 1e-8);
+
+julia&gt; D_combined, V_combined = eigh_trunc(A; trunc = strategy);
+
+julia&gt; size(D_combined, 1) &lt;= 3
+true
+
+julia&gt; # 5. Truncated SVD example
+       B = [3.0 2.0 1.0; 1.0 4.0 2.0; 2.0 1.0 5.0; 0.5 1.0 2.0];
+
+julia&gt; U, S, Vh = svd_trunc(B; trunc = (maxrank = 2,));
+
+julia&gt; size(S)
+(2, 2)
+
+julia&gt; size(U)
+(4, 2)
+
+julia&gt; size(Vh)
+(2, 3)
+
+julia&gt; # Verify the truncated decomposition error equals the discarded singular values
+       norm(B - U * S * Vh) ≈ norm(svd_vals(B)[3:end])
+true</code></pre><h2 id="Truncation-with-SVD-vs-Eigenvalue-Decompositions"><a class="docs-heading-anchor" href="#Truncation-with-SVD-vs-Eigenvalue-Decompositions">Truncation with SVD vs Eigenvalue Decompositions</a><a id="Truncation-with-SVD-vs-Eigenvalue-Decompositions-1"></a><a class="docs-heading-anchor-permalink" href="#Truncation-with-SVD-vs-Eigenvalue-Decompositions" title="Permalink"></a></h2><p>When using truncations with different decomposition types, keep in mind:</p><ul><li><p><strong><code>svd_trunc</code></strong>: Singular values are always real and non-negative, sorted in descending order. Truncation by value typically keeps the largest singular values.</p></li><li><p><strong><code>eigh_trunc</code></strong>: Eigenvalues are real but can be negative for symmetric matrices. By default, <code>truncrank</code> sorts by absolute value, so <code>truncrank(k)</code> keeps the <code>k</code> eigenvalues with largest magnitude (positive or negative).</p></li><li><p><strong><code>eig_trunc</code></strong>: For general (non-symmetric) matrices, eigenvalues can be complex. Truncation by absolute value considers the complex magnitude.</p></li></ul><h2 id="Advanced:-Custom-Truncation-Filters"><a class="docs-heading-anchor" href="#Advanced:-Custom-Truncation-Filters">Advanced: Custom Truncation Filters</a><a id="Advanced:-Custom-Truncation-Filters-1"></a><a class="docs-heading-anchor-permalink" href="#Advanced:-Custom-Truncation-Filters" title="Permalink"></a></h2><p>For specialized needs, you can use <a href="../../library/#MatrixAlgebraKit.truncfilter-Tuple{Any}"><code>truncfilter</code></a> to define custom selection criteria:</p><pre><code class="language-julia-repl hljs">julia&gt; using MatrixAlgebraKit
+
+julia&gt; A = [4.0 -1.0 2.0; -1.0 3.0 1.0; 2.0 1.0 -2.0];
+
+julia&gt; # Keep only positive eigenvalues
+       strategy = truncfilter(x -&gt; x &gt; 0);
+
+julia&gt; D_positive, V_positive = eigh_trunc(A; trunc = strategy);
+
+julia&gt; size(D_positive, 1) &gt;= 2  # At least 2 positive eigenvalues
+true
+
+julia&gt; # Keep eigenvalues in a specific range
+       strategy = truncfilter(x -&gt; 1.0 &lt; abs(x) &lt; 5.0);
+
+julia&gt; D_range, V_range = eigh_trunc(A; trunc = strategy);
+
+julia&gt; size(D_range, 1) &gt;= 1  # At least 1 eigenvalue in range
+true</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decompositions/">« Decompositions</a><a class="docs-footer-nextpage" href="../matrix_functions/">Matrix functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Tuesday 7 October 2025 23:32">Tuesday 7 October 2025</span>. Using Julia version 1.11.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body><div data-docstringscollapsed="true"></div></html>
